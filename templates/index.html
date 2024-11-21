@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Health Monitoring</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Real-Time System Health Monitoring</h1>
+    <canvas id="chart" style="width:100%;max-width:800px"></canvas>
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],  // Time labels
+                datasets: [
+                    {
+                        label: 'CPU Usage (%)',
+                        data: [],
+                        borderColor: 'red',
+                        fill: false,
+                    },
+                    {
+                        label: 'Temperature (°C)',
+                        data: [],
+                        borderColor: 'blue',
+                        fill: false,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Time' } },
+                    y: { title: { display: true, text: 'Value' }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Fetch data from Flask endpoint
+        setInterval(() => {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    chart.data.labels = data.time;
+                    chart.data.datasets[0].data = data.cpu_usage;
+                    chart.data.datasets[1].data = data.temperature;
+                    chart.update();
+                });
+        }, 1000);  // Update every second
+    </script>
+</body>
+</html>
