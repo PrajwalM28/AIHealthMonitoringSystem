@@ -1,0 +1,5 @@
+Flask==2.3.2                # Web framework for serving the app
+pandas==2.0.3               # Data manipulation library
+numpy==1.25.0               # Numerical computations
+scikit-learn==1.2.2         # Machine learning library for Isolation Forest
+joblib==1.2.0               # Model saving and loading
